@@ -22,6 +22,10 @@ mongoose
 
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 
+// Cohort Model
+
+// Student Model
+
 // MIDDLEWARE
 // Research Team - Set up CORS middleware here:
 // ...
