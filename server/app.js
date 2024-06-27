@@ -1,7 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
@@ -160,10 +159,119 @@ app.delete("/api/cohorts/:cohortId", async (req, res, next) => {
 // ...STUDENT ROUTES
 app.get("/api/students", async (req, res, next) => {
   try {
-    const students = await Student.find();
+    const students = await Student.find().populate("cohort");
     res.json(students);
   } catch (error) {
     next(error);
+  }
+});
+
+app.get("/api/students/:studentId", async (req, res, next) => {
+  try {
+    const { studentId } = req.params;
+    const oneStudent = await Student.findOne({ _id: studentId }).populate(
+      "cohort"
+    );
+    res.json(oneStudent);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+app.get("/api/students/cohorts/:cohortId", async (req, res, next) => {
+  try {
+    const { cohortId } = req.params;
+    const students = await Student.find({ cohort: cohortId }).populate(
+      "cohort"
+    );
+    res.json(students);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
+app.post("/api/students", async (req, res, next) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    linkedinUrl,
+    languages,
+    program,
+    background,
+    image,
+    cohort,
+    projects,
+  } = req.body;
+
+  const studentToCreate = {
+    firstName,
+    lastName,
+    email,
+    phone,
+    linkedinUrl,
+    languages,
+    program,
+    background,
+    image,
+    cohort,
+    projects,
+  };
+  const createdStudent = await Student.create({ cohort: cohortId });
+  res.status(201).json(createdStudent);
+  try {
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
+app.put("/api/students/:studentId", async (req, res, next) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    linkedinUrl,
+    languages,
+    program,
+    background,
+    image,
+    cohort,
+    projects,
+  } = req.body;
+  const studentToUpdate = {
+    firstName,
+    lastName,
+    email,
+    phone,
+    linkedinUrl,
+    languages,
+    program,
+    background,
+    image,
+    cohort,
+    projects,
+  };
+  const { studentId } = req.params;
+  const updatedStudent = await Student.findOneAndUpdate(
+    { _id: studenttId },
+    studentToUpdate,
+    { new: true }
+  );
+  res.status(202).json(updatedStudent);
+  try {
+  } catch (error) {
+    res.sendStatus(500);
+  }
+});
+
+app.delete("/api/students/:studentId", async (req, res, next) => {
+  try {
+    const { studentId } = req.params;
+    await Student.findOneAndDelete({ _id: studentId });
+    res.sendStatus(204);
+  } catch (error) {
+    res.sendStatus(500);
   }
 });
 
