@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Student = require("../models/Student.model");
+const isAuth = require("../middleware/isAuth");
 //! Prefixed with /api/students
 
 router.get("/", async (req, res, next) => {
@@ -36,7 +37,7 @@ router.get("/cohort/:cohortId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", isAuth, async (req, res, next) => {
   try {
     const {
       firstName,
@@ -72,7 +73,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put(":studentId", async (req, res, next) => {
+router.put(":studentId", isAuth, async (req, res, next) => {
   const {
     firstName,
     lastName,
@@ -112,7 +113,7 @@ router.put(":studentId", async (req, res, next) => {
   }
 });
 
-router.delete("/:studentId", async (req, res, next) => {
+router.delete("/:studentId", isAuth, async (req, res, next) => {
   git;
   try {
     const { studentId } = req.params;

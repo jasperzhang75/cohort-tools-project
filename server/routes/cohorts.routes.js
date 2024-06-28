@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Cohort = require("../models/Cohort.model");
-
+const isAuth = require("../middleware/isAuth");
 //! Prefixed with /api/cohorts
 
 router.get("/", async (req, res, next) => {
@@ -22,7 +22,7 @@ router.get("/:cohortId", async (req, res, next) => {
     next(error);
   }
 });
-router.post("/", async (req, res, next) => {
+router.post("/", isAuth, async (req, res, next) => {
   const {
     cohortSlug,
     cohortName,
@@ -58,7 +58,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:cohortId", async (req, res, next) => {
+router.put("/:cohortId", isAuth, async (req, res, next) => {
   const {
     cohortSlug,
     cohortName,
@@ -98,7 +98,7 @@ router.put("/:cohortId", async (req, res, next) => {
   }
 });
 
-router.delete("/:cohortId", async (req, res, next) => {
+router.delete("/:cohortId", isAuth, async (req, res, next) => {
   try {
     const { cohortId } = req.params;
     await Cohort.findOneAndDelete({ _id: cohortId });

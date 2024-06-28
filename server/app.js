@@ -1,8 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 const app = express();
 const PORT = 5005;
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandling");
@@ -20,6 +22,8 @@ app.use(morgan("dev"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use("/auth", require("./routes/auth.routes.js"));
 
 app.use("/api", require("./routes/index.routes"));
 
